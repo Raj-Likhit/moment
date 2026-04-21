@@ -19,907 +19,128 @@
             --glass: rgba(255,255,255,0.02);
             --glass-thick: rgba(255,255,255,0.05);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         html { scroll-behavior: smooth; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* ── TEXTURE ── */
+        .noise { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-        /* ── TACTILE TEXTURE ── */
-        .noise {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* ── MESH BACKGROUND ── */
-        .mesh-container {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: var(--bg);
-            overflow: hidden;
-        }
-        .mesh-blob {
-            position: absolute;
-            width: 60vw;
-            height: 60vw;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            animation: drift 20s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
-        }
-        .blob-1 { background: var(--sage); top: -10%; left: -10%; animation-delay: 0s; }
+        /* ── MESH ── */
+        .mesh-container { position: fixed; inset: 0; z-index: -1; background: var(--bg); overflow: hidden; }
+        .mesh-blob { position: absolute; width: 60vw; height: 60vw; border-radius: 50%; filter: blur(120px); opacity: 0.15; animation: drift 20s infinite alternate cubic-bezier(0.45,0,0.55,1); }
+        .blob-1 { background: var(--sage); top: -10%; left: -10%; }
         .blob-2 { background: var(--amber); bottom: -10%; right: -10%; animation-delay: -5s; }
-        
-        @keyframes drift {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(10%, 10%) scale(1.1); }
-        }
+        @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(10%,10%) scale(1.1); } }
 
         /* ── CURSOR GLOW ── */
-        .cursor-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(130,217,172,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            transform: translate(-50%, -50%);
-            transition: opacity 1s ease;
-            opacity: 0;
-        }
+        .cursor-glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(130,217,172,0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: -1; transform: translate(-50%,-50%); transition: opacity 1s ease; opacity: 0; }
 
-        /* ── FLOATING ANIMATION ── */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+        /* ── ANIMATIONS ── */
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .float { animation: float 6s ease-in-out infinite; }
         .float-delayed { animation: float 6s ease-in-out infinite; animation-delay: -3s; }
-
-        /* ── SHIMMER ── */
-        @keyframes shimmer {
-            0% { color: var(--text); }
-            50% { color: var(--amber); filter: drop-shadow(0 0 8px rgba(240,185,122,0.4)); }
-            100% { color: var(--text); }
-        }
+        @keyframes shimmer { 0% { color: var(--text); } 50% { color: var(--amber); filter: drop-shadow(0 0 8px rgba(240,185,122,0.4)); } 100% { color: var(--text); } }
         em { animation: shimmer 4s infinite; }
 
-        /* ── NAVIGATION ── */
-        nav {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            padding: 12px 32px;
-            background: rgba(12,11,10,0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            transition: all 0.4s ease;
-        }
+        /* ── NAV ── */
+        nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; align-items: center; gap: 32px; padding: 12px 32px; background: rgba(12,11,10,0.8); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 100px; transition: all 0.4s ease; }
         nav:hover { border-color: rgba(255,255,255,0.1); }
-        nav a {
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
+        nav a { text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 300; letter-spacing: 0.05em; transition: color 0.3s; cursor: pointer; }
         nav a:hover, nav a.active { color: var(--text); }
-        .nav-divider { width: 1px; height: 14px; background: var(--border); }
+        .nav-divider { width: 1px; height: 14px; background: var(--border); flex-shrink: 0; }
 
         /* ── TYPOGRAPHY ── */
         h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 300; }
-        .editorial-caps {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            color: var(--muted);
-            margin-bottom: 24px;
-            display: block;
-        }
+        .editorial-caps { font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--muted); margin-bottom: 24px; display: block; }
 
         /* ── SECTIONS ── */
-        section {
-            min-height: 100vh;
-            padding: 120px 48px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
+        section { min-height: 100vh; padding: 120px 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 1200px; margin: 0 auto; position: relative; }
 
-        /* ── HERO (PRODUCT FOCUS) ── */
+        /* ── HERO ── */
         .hero { text-align: center; }
-        .hero h1 {
-            font-size: clamp(48px, 8vw, 96px);
-            line-height: 1;
-            margin-bottom: 24px;
-            letter-spacing: -0.01em;
-        }
+        .hero h1 { font-size: clamp(48px, 8vw, 96px); line-height: 1; margin-bottom: 24px; letter-spacing: -0.01em; }
         .hero h1 em { font-style: italic; font-weight: 300; color: var(--amber); }
-        .hero p {
-            max-width: 600px;
-            font-size: 18px;
-            color: var(--muted);
-            font-weight: 300;
-            margin-bottom: 48px;
-            line-height: 1.6;
-        }
+        .hero p { max-width: 600px; font-size: 18px; color: var(--muted); font-weight: 300; margin-bottom: 48px; line-height: 1.6; }
 
-        /* ── PRODUCT MOCKUP ── */
-        .mockup-container {
-            width: 100%;
-            max-width: 900px;
-            height: 500px;
-            background: var(--bg-raised);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-            margin-bottom: 80px;
-        }
-        .mockup-base {
-            padding: 40px;
-            opacity: 0.3;
-            filter: blur(4px);
-            pointer-events: none;
-        }
-        .mockup-order-card {
-            width: 100%;
-            padding: 20px;
-            background: #fff;
-            color: #000;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mockup-overlay {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(12,11,10,0.9), var(--bg));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 2;
-            padding: 40px;
-        }
+        /* ── MOCKUP ── */
+        .mockup-container { width: 100%; max-width: 900px; height: 500px; background: var(--bg-raised); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 40px 100px rgba(0,0,0,0.6); margin-bottom: 80px; }
+        .mockup-base { padding: 40px; opacity: 0.3; filter: blur(4px); pointer-events: none; }
+        .mockup-order-card { width: 100%; padding: 20px; background: #fff; color: #000; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .mockup-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(12,11,10,0.9), var(--bg)); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 2; padding: 40px; }
         .mockup-overlay h3 { font-size: 32px; margin-bottom: 12px; }
         .mockup-overlay p { font-size: 14px; color: var(--muted); max-width: 300px; margin-bottom: 24px; }
-        
-        .cta-group { display: flex; gap: 16px; align-items: center; justify-content: center; }
-        .btn {
-            padding: 16px 36px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 400;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            font-family: 'DM Sans', sans-serif;
-            border: 1px solid var(--border);
-        }
+
+        /* ── BUTTONS ── */
+        .cta-group { display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 16px 36px; border-radius: 100px; font-size: 14px; font-weight: 400; cursor: pointer; text-decoration: none; transition: all 0.3s cubic-bezier(0.23,1,0.32,1); font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); display: inline-block; }
         .btn-prime { background: var(--text); color: var(--bg); border: none; }
         .btn-prime:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(130,217,172,0.15); }
         .btn-ghost { background: transparent; color: var(--text); }
         .btn-ghost:hover { background: var(--glass); border-color: var(--muted); }
+        .btn-sage { background: rgba(130,217,172,0.1); color: var(--sage); border-color: rgba(130,217,172,0.3); }
+        .btn-sage:hover { background: rgba(130,217,172,0.2); }
 
-        /* ── CONTEXTUAL STORY ── */
-        .story {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 100px;
-            align-items: center;
-            text-align: left;
-        }
+        /* ── STORY ── */
+        .story { display: grid; grid-template-columns: 1.1fr 1fr; gap: 100px; align-items: center; text-align: left; }
         .story-text h2 { font-size: 56px; line-height: 1.1; margin-bottom: 32px; }
         .story-text h2 em { font-style: italic; color: var(--sage); }
         .story-text p { font-size: 16px; color: var(--muted); margin-bottom: 24px; line-height: 1.8; font-weight: 300; }
-        
         .story-image-wrap { position: relative; }
-        .story-image {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: var(--bg-raised);
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-        }
+        .story-image { width: 100%; aspect-ratio: 1/1; background: var(--bg-raised); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
         .story-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
-        .image-caption {
-            position: absolute;
-            bottom: -40px;
-            right: 0;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 18px;
-            font-style: italic;
-            color: var(--muted);
-        }
+        .image-caption { position: absolute; bottom: -40px; right: 0; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--muted); }
 
-        /* ── INTERVENTION TILES ── */
-        .tiles-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            width: 100%;
-            margin-top: 64px;
-        }
-        .tile {
-            padding: 40px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            transition: all 0.4s ease;
-        }
+        /* ── TILES ── */
+        .tiles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; width: 100%; margin-top: 64px; }
+        .tile { padding: 40px; background: var(--glass); border: 1px solid var(--border); transition: all 0.4s ease; }
         .tile:hover { background: var(--glass-thick); border-color: var(--sage); transform: translateY(-4px); }
         .tile-icon { font-size: 32px; margin-bottom: 24px; display: block; }
         .tile h4 { font-family: 'DM Sans', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; color: var(--text); }
         .tile p { font-size: 14px; color: var(--muted); font-weight: 300; }
 
-        /* ── REFLECTION VIEW ── */
+        /* ── REFLECTION ── */
         .reflection-view { width: 100%; max-width: 1100px; }
         .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
         .reflection-grid { display: grid; grid-template-columns: 320px 1fr; gap: 48px; }
-        
-        .streak-card {
-            padding: 50px 40px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            text-align: left;
-            position: relative;
-        }
-        .streak-card::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--sage);
-            box-shadow: 0 0 15px var(--sage);
-        }
+        .streak-card { padding: 50px 40px; background: var(--glass); border: 1px solid var(--border); text-align: left; position: relative; }
+        .streak-card::after { content: ''; position: absolute; top: 20px; right: 20px; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 15px var(--sage); }
         .streak-val { font-family: 'Cormorant Garamond', serif; font-size: 140px; color: var(--sage); line-height: 0.7; margin-bottom: 10px; }
-        
         .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px; }
         .metric-tile { padding: 32px; background: var(--glass); border: 1px solid var(--border); }
         .mt-val { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--text); line-height: 1; margin-bottom: 8px; }
         .mt-val.amber { color: var(--amber); }
-        
         .timeline-box { padding: 32px; background: var(--glass); border: 1px solid var(--border); margin-top: 24px; }
 
-        /* ── SIGNUP FORM ── */
-        .signup-card {
-            width: 100%;
-            max-width: 480px;
-            padding: 60px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            text-align: left;
-            position: relative;
-            backdrop-filter: blur(20px);
-        }
+        /* ── SIGNUP ── */
+        .signup-card { width: 100%; max-width: 480px; padding: 60px; background: var(--glass); border: 1px solid var(--border); text-align: left; backdrop-filter: blur(20px); }
         .form-group { margin-bottom: 32px; }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--muted);
-            margin-bottom: 12px;
-        }
-        .form-input {
-            width: 100%;
-            padding: 16px 0;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--subtle);
-            color: var(--text);
-            font-family: inherit;
-            font-size: 16px;
-            transition: border-color 0.4s;
-            outline: none;
-        }
-        .form-input:focus { border-color: var(--sage); }
-
-        /* ── SETUP TOAST ── */
-        .toast {
-            position: fixed;
-            bottom: 40px;
-            left: 40px;
-            z-index: 2000;
-            padding: 24px;
-            background: rgba(20,18,16,0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 320px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .toast.visible { transform: translateY(0); opacity: 1; }
-
-        /* ── SETUP VIEW ── */
-        .setup-step {
-            padding: 32px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
-            text-align: left;
-        }
-        .step-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--sage); margin-bottom: 8px; display: block; }
-
-        /* ── FOOTER ── */
-        footer { padding: 80px 48px; text-align: center; color: var(--subtle); font-size: 11px; letter-spacing: 0.15em; border-top: 1px solid var(--border); }
-
-        /* ── REVEAL ── */
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        [data-view] { display: none; }
-        [data-view].active { display: flex; }
-
-        /* ── SETUP TOAST ── */
-        #setup-toast {
-            position: fixed;
-            bottom: 32px;
-            left: 32px;
-            z-index: 2000;
-            width: 300px;
-            padding: 24px 28px;
-            background: rgba(20, 18, 16, 0.85);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(130,217,172,0.2);
-            border-radius: 16px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
-            opacity: 0;
-            transform: translateY(16px);
-            pointer-events: none;
-            transition: opacity 0.5s cubic-bezier(0.23,1,0.32,1), transform 0.5s cubic-bezier(0.23,1,0.32,1);
-        }
-        #setup-toast.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-        .toast-eyebrow {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.25em;
-            color: var(--sage);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 8px var(--sage); flex-shrink: 0; }
-        .toast-heading { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--text); margin-bottom: 6px; }
-        .toast-sub { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 20px; line-height: 1.5; }
-        .toast-actions { display: flex; align-items: center; gap: 12px; }
-        .toast-btn {
-            padding: 9px 20px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 400;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.25s ease;
-            text-decoration: none;
-        }
-        .toast-btn-prime { background: rgba(130,217,172,0.12); border: 1px solid rgba(130,217,172,0.3); color: var(--sage); }
-        .toast-btn-prime:hover { background: rgba(130,217,172,0.22); }
-        .toast-dismiss { background: none; border: none; font-size: 12px; color: var(--subtle); cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 0; transition: color 0.2s; }
-        .toast-dismiss:hover { color: var(--muted); }
+        .form-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 12px; }
+        .form-input { width: 100%; padding: 16px 0; background: transparent; border: none; border-bottom: 1px solid var(--subtle); color: var(--text); font-family: inherit; font-size: 16px; transition: border-color 0.4s; outline: none; }
+        .form-input:focus { border-bottom-color: var(--sage); }
 
         /* ── SETUP VIEW ── */
         .setup-view { width: 100%; max-width: 760px; text-align: center; }
         .setup-steps { display: flex; flex-direction: column; gap: 16px; margin-top: 56px; text-align: left; }
-        .setup-step {
-            display: grid;
-            grid-template-columns: 56px 1fr;
-            gap: 28px;
-            align-items: flex-start;
-            padding: 32px 36px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            transition: all 0.35s ease;
-        }
+        .setup-step { display: grid; grid-template-columns: 56px 1fr; gap: 28px; align-items: flex-start; padding: 32px 36px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; transition: all 0.35s ease; }
         .setup-step:hover { background: var(--glass-thick); border-color: rgba(130,217,172,0.15); transform: translateX(4px); }
-        .step-num {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 48px;
-            font-weight: 300;
-            color: var(--subtle);
-            line-height: 1;
-            padding-top: 2px;
-            transition: color 0.35s;
-        }
+        .step-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--subtle); line-height: 1; padding-top: 2px; transition: color 0.35s; }
         .setup-step:hover .step-num { color: var(--sage); }
         .step-icon { font-size: 22px; margin-bottom: 10px; display: block; }
-        .step-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--text); margin-bottom: 6px; letter-spacing: 0.02em; }
+        .step-title { font-size: 14px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
         .step-desc { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.65; }
-        .step-code {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 12px;
-            color: var(--sage);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.02em;
-        }
+        .step-code { display: inline-block; padding: 3px 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 5px; font-size: 12px; color: var(--sage); font-family: 'Courier New', monospace; }
 
-        @media (max-width: 900px) {
-            .story { grid-template-columns: 1fr; gap: 60px; }
-            .tiles-grid { grid-template-columns: 1fr; }
-            .reflection-grid { grid-template-columns: 1fr; }
-            nav { width: 90%; padding: 10px 20px; }
-            #setup-toast { left: 16px; right: 16px; width: auto; bottom: 16px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="noise"></div>
-    <div class="cursor-glow" id="cursor-glow"></div>
-    <div class="mesh-container">
-        <div class="mesh-blob blob-1"></div>
-        <div class="mesh-blob blob-2"></div>
-    </div>
-
-    <nav>
-        <a id="nav-story" onclick="setView('story')">Philosophy</a>
-        <div class="nav-divider"></div>
-        <a id="nav-reflection" onclick="setView('reflection')">Records</a>
-        <div class="nav-divider"></div>
-        <a id="nav-signup" onclick="setView('signup')">Partnership</a>
-        <div class="nav-divider"></div>
-        <a id="nav-setup" onclick="setView('setup')">Setup</a>
-        <div class="nav-divider"></div>
-        <a href="moment-extension.zip" download class="btn btn-prime download-trigger" style="padding: 6px 18px; font-size: 11px;">Download</a>
-    </nav>
-
-    <!-- STORY VIEW -->
-    <div id="view-story" data-view class="active" style="display: flex; flex-direction: column;">
-        <section class="hero reveal">
-            <span class="editorial-caps">The Interception Layer</span>
-            <h1>The pause your cravings <em>didn't see coming.</em></h1>
-            <p>Moment is a Chrome extension designed to sit between your hunger and your habits. When you open a delivery app, we open a window for reflection.</p>
-            
-            <!-- PRODUCT MOCKUP: Shows the "Idea" directly -->
-            <div class="mockup-container reveal float">
-                <div class="mockup-base">
-                    <div class="mockup-order-card"><span>Healthy Bowl</span><span>₹320</span></div>
-                    <div class="mockup-order-card"><span>Spicy Ramen</span><span>₹450</span></div>
-                    <div class="mockup-order-card"><span>Checkout</span><span>→</span></div>
-                </div>
-                <div class="mockup-overlay">
-                    <span class="editorial-caps" style="color: var(--sage); margin-bottom: 12px;">Moment Intercepted</span>
-                    <h3>Are you actually hungry?</h3>
-                    <p>Cravings often fade within 19 seconds. Take a breath before you order.</p>
-                    <div class="cta-group">
-                        <div class="btn btn-prime" style="pointer-events: none;">Breathe (19s)</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cta-group">
-                <a href="moment-extension.zip" download class="btn btn-prime download-trigger">Download Extension</a>
-                <a onclick="setView('reflection')" class="btn btn-ghost">View Your Progress</a>
-            </div>
-        </section>
-
-        <section class="story">
-            <div class="story-image-wrap reveal">
-                <div class="story-image float-delayed">
-                    <!-- IMAGE: Relevant to the context of a meal/phone -->
-                    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba3f21?q=80&w=1200&auto=format&fit=crop" alt="Hand intentionally setting down a phone">
-                </div>
-                <span class="image-caption">The quiet before the choice.</span>
-            </div>
-            <div class="story-text reveal">
-                <span class="editorial-caps">The Conflict</span>
-                <h2>Breaking the <em>Loop.</em></h2>
-                <p>Digital delivery apps are engineered for friction-less spending. They exploit the "hungry brain" to bypass your logic. Moment restores that friction—not as a punishment, but as a courtesy.</p>
-                <p>We believe the most premium way to live is with intentionality. Every meal you cook at home after a "Moment" pause isn't just money saved—it's a habit rewritten.</p>
-                <a onclick="setView('reflection')" class="btn btn-ghost" style="margin-top: 20px;">Explore the reflection engine →</a>
-            </div>
-        </section>
-
-        <section class="tiles reveal" style="padding-bottom: 160px;">
-            <span class="editorial-caps" style="text-align: center; width: 100%;">The Intervention Flow</span>
-            <div class="tiles-grid">
-                <div class="tile">
-                    <span class="tile-icon">🧘</span>
-                    <h4>The Breath</h4>
-                    <p>A science-backed 4-7-8 breathing cycle that calms the nervous system and kills emotional impulses.</p>
-                </div>
-                <div class="tile">
-                    <span class="tile-icon">⚖️</span>
-                    <h4>The Freedom</h4>
-                    <p>We never block your order. We just ensure that if you DO order, it's a choice, not an accident.</p>
-                </div>
-                <div class="tile">
-                    <span class="tile-icon">📈</span>
-                    <h4>The Record</h4>
-                    <p>Track your conversions and projected annual savings. See yourself getting stronger every day.</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- RECORDS VIEW -->
-    <div id="view-reflection" data-view>
-        <section class="reflection-view">
-            <div class="dash-header reveal">
-                <div>
-                    <span class="editorial-caps" style="margin-bottom: 8px;">Habit Mirror</span>
-                    <h2 style="font-size: 64px;">Reflection <em>Record</em></h2>
-                </div>
-            </div>
-
-            <div class="reflection-grid">
-                <div class="streak-card reveal">
-                    <span class="editorial-caps">Active Streak</span>
-                    <div class="streak-val" id="streak-val">12</div>
-                    <span class="editorial-caps" style="color: var(--sage)">Strength Gained</span>
-                    <p id="quote-text" style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: var(--muted); margin-top: 40px; border-left: 1px solid var(--border); padding-left: 20px;"></p>
-                </div>
-
-                <div class="reveal">
-                    <div class="metrics-grid">
-                        <div class="metric-tile">
-                            <span class="editorial-caps">This Week's Pauses</span>
-                            <div class="mt-val" id="pauses-week">0</div>
-                        </div>
-                        <div class="metric-tile">
-                            <span class="editorial-caps">Est. Saved</span>
-                            <div class="mt-val amber" id="saved-month">₹0</div>
-                        </div>
-                    </div>
-
-                    <div class="timeline-box">
-                        <span class="editorial-caps">Conversion Timeline</span>
-                        <div style="display: flex; gap: 10px; margin-top: 32px;" id="timeline"></div>
-                    </div>
-
-                    <div class="tile reveal" style="margin-top: 24px; background: linear-gradient(90deg, rgba(130,217,172,0.03), transparent); border-color: rgba(130,217,172,0.15);">
-                        <span class="editorial-caps" style="color: var(--sage);">Annual Impact</span>
-                        <div class="streak-val" id="saved-annual" style="font-size: 80px; color: var(--amber); margin-top: 10px;">₹0</div>
-                        <p style="font-size: 14px; color: var(--muted); margin-top: 16px;">Based on your current conversion of Home vs. Delivery choices.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- SIGNUP VIEW -->
-    <div id="view-signup" data-view>
-        <section class="signup-view hero">
-            <span class="editorial-caps">The 19-Second Commitment</span>
-            <h1 style="margin-bottom: 48px;">Begin your <em>journey.</em></h1>
-            
-            <div class="signup-card reveal">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="form-input" placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label>Email Architecture</label>
-                    <input type="email" class="form-input" placeholder="email@address.com">
-                </div>
-                <div class="form-group" style="margin-bottom: 48px;">
-                    <label>Security Key</label>
-                    <input type="password" class="form-input" placeholder="••••••••">
-                </div>
-                <button class="btn btn-prime" style="width: 100%;">Create Account</button>
-            </div>
-            
-            <p style="margin-top: 48px; font-size: 14px; opacity: 0.5;">Intentionality starts with a single step. Join the collective choice.</p>
-        </section>
-    </div>
-
-    <!-- SETUP TOAST -->
-    <div id="setup-toast">
-        <div class="toast-eyebrow"><span class="toast-dot"></span>Setup Required</div>
-        <div class="toast-heading">One more step.</div>
-        <div class="toast-sub">The extension needs to be loaded manually into Chrome. It takes about 30 seconds.</div>
-        <div class="toast-actions">
-            <a class="toast-btn toast-btn-prime" onclick="setView('setup'); dismissToast();">How to install →</a>
-            <button class="toast-dismiss" onclick="dismissToast()">Dismiss</button>
-        </div>
-    </div>
-
-    <!-- SETUP VIEW -->
-    <div id="view-setup" data-view>
-        <section class="setup-view hero reveal">
-            <span class="editorial-caps">Installation Guide</span>
-            <h1 style="font-size: clamp(36px, 6vw, 72px); margin-bottom: 16px;">Up and running <em>in 30 seconds.</em></h1>
-            <p style="max-width: 520px; font-size: 16px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 0;">Chrome extensions loaded from a zip require a quick manual install. Follow these four steps.</p>
-
-            <div class="setup-steps">
-                <div class="setup-step reveal">
-                    <div class="step-num">1</div>
-                    <div>
-                        <span class="step-icon">📦</span>
-                        <div class="step-title">Unzip the download</div>
-                        <div class="step-desc">Find <span class="step-code">moment-extension.zip</span> in your Downloads folder and extract it. You'll get a folder called <span class="step-code">moment-extension</span>. Keep it somewhere permanent — Chrome needs it to stay there.</div>
-                    </div>
-                </div>
-                <div class="setup-step reveal">
-                    <div class="step-num">2</div>
-                    <div>
-                        <span class="step-icon">🌐</span>
-                        <div class="step-title">Open Chrome Extensions</div>
-                        <div class="step-desc">In a new Chrome tab, navigate to <span class="step-code">chrome://extensions</span> and press Enter. This is Chrome's built-in extension manager.</div>
-                    </div>
-                </div>
-                <div class="setup-step reveal">
-                    <div class="step-num">3</div>
-                    <div>
-                        <span class="step-icon">🔧</span>
-                        <div class="step-title">Enable Developer Mode</div>
-                        <div class="step-desc">In the top-right corner of the Extensions page, toggle on <span class="step-code">Developer mode</span>. This unlocks the ability to load local extensions.</div>
-                    </div>
-                </div>
-                <div class="setup-step reveal">
-                    <div class="step-num">4</div>
-                    <div>
-                        <span class="step-icon">✅</span>
-                        <div class="step-title">Load the folder</div>
-                        <div class="step-desc">Click <span class="step-code">Load unpacked</span> and select the <span class="step-code">moment-extension</span> folder you extracted. Moment will appear in your extensions list — pin it to your toolbar and you're done.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 56px;">
-                <a onclick="setView('story')" class="btn btn-ghost">← Back to Philosophy</a>
-            </div>
-        </section>
-    </div>
-
-    <!-- SETUP VIEW -->
-    <div id="view-setup" data-view>
-        <section class="hero revelation-view" style="padding-bottom: 200px;">
-            <span class="editorial-caps">The Architecture of Control</span>
-            <h1 style="margin-bottom: 64px;">Setting up <em>Moment.</em></h1>
-            
-            <div style="width: 100%; max-width: 800px;">
-                <div class="setup-step reveal">
-                    <span class="step-num">01</span>
-                    <h4>Prepare the Files</h4>
-                    <p style="color: var(--muted); font-size: 14px;">Unzip the <code style="color: var(--amber);">moment-extension.zip</code> file into a dedicated folder on your system.</p>
-                </div>
-                <div class="setup-step reveal">
-                    <span class="step-num">02</span>
-                    <h4>Access Extensions</h4>
-                    <p style="color: var(--muted); font-size: 14px;">Visit <code style="color: var(--amber);">chrome://extensions</code> in your browser and toggle <strong>Developer Mode</strong> at the top right.</p>
-                </div>
-                <div class="setup-step reveal">
-                    <span class="step-num">03</span>
-                    <h4>Anchor the Code</h4>
-                    <p style="color: var(--muted); font-size: 14px;">Click <strong>Load Unpacked</strong> and select the unzipped Moment folder. The interception engine is now active.</p>
-                </div>
-            </div>
-            
-            <a onclick="setView('story')" class="btn btn-prime" style="margin-top: 40px;">Back to Philosophy</a>
-        </section>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="setup-toast" class="toast">
-        <span class="editorial-caps" style="color: var(--sage);">Download Started</span>
-        <h4 style="font-family: 'DM Sans', sans-serif;">Action Required</h4>
-        <p style="font-size: 12px; color: var(--muted);">Extensions require a quick 3-step activation via Chrome Developer Mode.</p>
-        <button onclick="setView('setup'); hideToast();" class="btn btn-prime" style="padding: 10px; font-size: 11px;">View Setup Guide</button>
-    </div>
-
-    <footer>
-        <div class="editorial-caps" style="font-size: 9px; opacity: 0.5;">Moment — Designed to protect your peace and your pocket. © 2026</div>
-    </footer>
-
-    <script>
-        // ── VIEW MANAGEMENT ──
-        function setView(id) {
-            document.querySelectorAll('[data-view]').forEach(v => {
-                v.classList.remove('active');
-                v.style.display = 'none';
-            });
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-
-            const activeView = document.getElementById('view-' + id);
-            if (activeView) {
-                activeView.classList.add('active');
-                activeView.style.display = 'flex';
-                activeView.style.flexDirection = 'column';
-            }
-
-            const navEl = document.getElementById('nav-' + id);
-            if (navEl) navEl.classList.add('active');
-
-            window.scrollTo(0, 0);
-
-            if (id === 'reflection') loadDashboard();
-
-            // After view is visible and scroll is at top, trigger reveals
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    initReveal();
-                });
-            });
-        }
-
-        // ── REVEAL SYSTEM ──
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.05 });
-
-        function initReveal() {
-            const elements = document.querySelectorAll('.reveal:not(.visible)');
-            elements.forEach((el, index) => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    const delay = index % 3 * 100;
-                    setTimeout(() => el.classList.add('visible'), delay);
-                } else {
-                    revealObserver.observe(el);
-                }
-            });
-        }
-
-        // ── DASHBOARD LOGIC ──
-        function loadDashboard() {
-            if (typeof chrome !== 'undefined' && chrome.storage) {
-                chrome.storage.local.get(['streak', 'interventions'], (res) => {
-                    populate(res.streak || 0, res.interventions || []);
-                });
-            } else {
-                populate(14, generateMockInterventions());
-            }
-        }
-
-        function populate(streak, interventions) {
-            document.getElementById('streak-val').textContent = streak;
-            const now = Date.now();
-            const homeCount = interventions.filter(i => i.choice === 'home').length;
-            const savingsMonth = homeCount * 320;
-            
-            document.getElementById('pauses-week').textContent = interventions.filter(i => (now - i.ts) < 7 * 86400000).length;
-            document.getElementById('saved-month').textContent = `₹${savingsMonth}`;
-            document.getElementById('saved-annual').textContent = `₹${savingsMonth * 12}`;
-
-            const qTxt = document.getElementById('quote-text');
-            const quotes = ["\"The strongest muscle you have is your ability to pause.\"", "\"Every minute spent in reflection is an hour saved in regret.\"", "\"You are the curator of your own attention.\"", "\"Intentionality is the ultimate luxury.\"" ];
-            qTxt.textContent = quotes[streak % quotes.length];
-
-            const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';
-            for (let i = 0; i < 7; i++) {
-                const day = document.createElement('div');
-                const hasAct = Math.random() > 0.3;
-                day.style.cssText = `flex: 1; height: 100px; border: 1px solid var(--border); display: flex; align-items: flex-end; padding: 10px; background: ${hasAct ? 'rgba(130,217,172,0.05)' : 'transparent'}`;
-                if (hasAct) day.innerHTML = `<div style="width: 100%; height: ${Math.random()*100}%; background: var(--sage); opacity: 0.4;"></div>`;
-                timeline.appendChild(day);
-            }
-        }
-
-        function generateMockInterventions() {
-            const inters = [];
-            for (let i = 0; i < 30; i++) inters.push({ ts: Date.now() - Math.random() * 30 * 86400000, choice: Math.random() > 0.4 ? 'home' : 'order' });
-            return inters;
-        }
-
-        // ── INTERACTION SYSTEM ──
-        const glow = document.getElementById('cursor-glow');
-        let mouseX = 0, mouseY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Cursor Glow
-            if (glow) {
-                glow.style.opacity = '1';
-                glow.style.left = mouseX + 'px';
-                glow.style.top = mouseY + 'px';
-            }
-
-            // Magnetic Buttons
-            document.querySelectorAll('.btn-prime, nav a').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                const distanceX = mouseX - centerX;
-                const distanceY = mouseY - centerY;
-                const distance = Math.sqrt(distanceX**2 + distanceY**2);
-
-                if (distance < 100) {
-                    const pull = 15;
-                    el.style.transform = `translate(${distanceX / pull}px, ${distanceY / pull}px)`;
-                } else {
-                    el.style.transform = '';
-                }
-            });
-
-            // Card Tilt (3D)
-            document.querySelectorAll('.tile, .streak-card, .metric-tile').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (mouseX > rect.left && mouseX < rect.right && mouseY > rect.top && mouseY < rect.bottom) {
-                    const x = (mouseX - rect.left) / rect.width - 0.5;
-                    const y = (mouseY - rect.top) / rect.height - 0.5;
-                    el.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateY(-5px)`;
-                } else {
-                    el.style.transform = '';
-                }
-            });
-            
-            // Parallax Blobs
-            const blob1 = document.querySelector('.blob-1');
-            const blob2 = document.querySelector('.blob-2');
-            if (blob1) blob1.style.transform = `translate(${mouseX * 0.05}px, ${mouseY * 0.05}px)`;
-            if (blob2) blob2.style.transform = `translate(${mouseX * -0.03}px, ${mouseY * -0.03}px)`;
-        });
-
-        // ── DOWNLOAD TOAST ──
-        let toastTimer = null;
-        function showToast() {
-            const toast = document.getElementById('setup-toast');
-            if (!toast) return;
-            clearTimeout(toastTimer);
-            toast.classList.add('visible');
-            toastTimer = setTimeout(dismissToast, 12000);
-        }
-        function dismissToast() {
-            const toast = document.getElementById('setup-toast');
-            if (toast) toast.classList.remove('visible');
-            clearTimeout(toastTimer);
-        }
-        document.querySelectorAll('.download-trigger').forEach(el => {
-            el.addEventListener('click', () => setTimeout(showToast, 800));
-        });
-
-        // Initial state
-        setView('story');
-    </script>
-</body>
-</html>
+        /* ── SETUP TOAST ── */
+        #setup-toast { position: fixed; bottom: 32px; left: 32px; z-index: 2000; width: 300px; padding: 24px 28px; background: rgba(20,18,16,0.9); backdrop-filter: blur(24px); border: 1px solid rgba(130,217,172,0.2); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.5s cubic-bezier(0.23,1,0.32,1), transform 0.5s cubic-bezier(0.23,1,0.32,1); }
+        #setup-toast.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+        .toast-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--sage); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 8px var(--sage); flex-shrink: 0; }
+        .toast-heading { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--text); margin-bottom: 6px; }
+        .toast-sub { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 20px; line-height: 1.5; }
+        .toast-actions { display: flex; align-items: center; gap: 12px; }
+        .toast-btn { padding: 9px 20px; border-radius: 100px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; text-decoration: none; border: 1px solid transparent; }
+        .toast-btn-prime { background: rgba(130,217,172,0.12); border-color: rgba(130,217,172,0.3); color: var(--sage); }
+        .toast-btn-prime:hover { background: rgba(130,217,172,0.22); }
+        .toast-dismiss { background: none; border: none; font-size: 12px; color: var(--subtle); cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 0; transition: color 0.2s; }
+        .toast-dismiss:hover { color: var(--muted); }
