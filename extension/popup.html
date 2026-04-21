@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+:root {
+  --bg: #100e0c;
+  --sage: #82d9ac;
+  --amber: #f0b97a;
+  --text: #f3ece4;
+  --muted: #8a8078;
+  --subtle: #4a443d;
+  --border: rgba(255,255,255,0.07);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  width: 258px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  padding: 22px;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 22px;
+}
+.streak {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 68px;
+  font-weight: 300;
+  color: var(--sage);
+  line-height: 1;
+}
+.streak-label {
+  font-size: 12px;
+  color: var(--subtle);
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+.stats {
+  display: flex;
+  flex-direction: column;
+}
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+}
+.stat-lbl { color: var(--subtle); }
+.stat-val { color: var(--muted); }
+.link {
+  display: block;
+  margin-top: 18px;
+  padding: 9px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--subtle);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.link:hover {
+  border-color: rgba(130,217,172,0.22);
+  color: var(--sage);
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="logo">Moment</div>
+  <div class="streak" id="streak">0</div>
+  <div class="streak-label">day streak</div>
+  <div class="stats">
+    <div class="stat"><span class="stat-lbl">Pauses today</span><span class="stat-val" id="today">0</span></div>
+    <div class="stat"><span class="stat-lbl">Home meals</span><span class="stat-val" id="home">0 total</span></div>
+    <div class="stat"><span class="stat-lbl">Est. saved</span><span class="stat-val" id="saved" style="color:var(--amber)">₹0</span></div>
+  </div>
+  <a class="link" id="dash-btn">Open dashboard →</a>
+  <script src="popup.js"></script>
+</body>
+</html>

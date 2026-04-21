@@ -1,0 +1,330 @@
+:root {
+  --bg:          #100e0c;
+  --bg-raised:   #181510;
+  --card:        rgba(255,255,255,0.035);
+  --card-hover:  rgba(255,255,255,0.06);
+  --sage:        #82d9ac;
+  --sage-dim:    rgba(130,217,172,0.18);
+  --sage-glow:   rgba(130,217,172,0.12);
+  --amber:       #f0b97a;
+  --amber-dim:   rgba(240,185,122,0.12);
+  --text:        #f3ece4;
+  --muted:       #8a8078;
+  --subtle:      #4a443d;
+  --border:      rgba(255,255,255,0.07);
+  --border-sage: rgba(130,217,172,0.22);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+#moment-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#moment-overlay.visible {
+  opacity: 1;
+}
+
+/* Background Texture */
+#moment-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 25% 60%, rgba(220,70,0,0.07) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 40% at 80% 30%, rgba(200,100,0,0.05) 0%, transparent 45%);
+  z-index: -1;
+}
+
+#moment-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.fg-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 540px;
+  width: 100%;
+  padding: 40px 24px;
+}
+
+/* Typography */
+.fg-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 72px;
+}
+
+.fg-head {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.fg-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 52px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Streak Badge */
+.fg-streak-badge {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 2;
+}
+
+.fg-s-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+  box-shadow: 0 0 10px var(--sage);
+}
+
+.fg-s-num {
+  color: var(--sage);
+  font-weight: 500;
+}
+
+/* Buttons */
+.fg-btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fg-btn {
+  padding: 13px 28px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.fg-btn:hover {
+  border-color: rgba(255,255,255,0.14);
+  color: var(--text);
+  background: var(--card-hover);
+}
+
+.fg-btn.prime {
+  background: rgba(130,217,172,0.1);
+  border-color: var(--border-sage);
+  color: var(--sage);
+}
+
+.fg-btn.prime:hover {
+  background: rgba(130,217,172,0.18);
+  border-color: var(--sage);
+}
+
+/* Phase 2: Breathing UI */
+.fg-breath-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.fg-rings {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fg-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  animation: fg-br 5s ease-in-out infinite;
+}
+
+.fg-r1 { width: 200px; height: 200px; border-color: rgba(130,217,172,0.07); animation-delay: 0s; }
+.fg-r2 { width: 156px; height: 156px; border-color: rgba(130,217,172,0.12); animation-delay: 0.4s; }
+.fg-r3 { width: 114px; height: 114px; border-color: rgba(130,217,172,0.2); animation-delay: 0.8s; }
+.fg-r4 { width: 72px; height: 72px; border-color: rgba(130,217,172,0.35); animation-delay: 1.2s; }
+
+.fg-core {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(130,217,172,0.25);
+  animation: fg-bc 5s ease-in-out infinite;
+}
+
+@keyframes fg-br {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+@keyframes fg-bc {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(130,217,172,0.2); }
+  50% { transform: scale(1.4); box-shadow: 0 0 32px rgba(130,217,172,0.35); }
+}
+
+.fg-breath-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--muted);
+  animation: fg-ft 5s ease-in-out infinite;
+}
+
+@keyframes fg-ft {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+.fg-breath-phases {
+  display: flex;
+  gap: 36px;
+}
+
+.fg-bp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.fg-bp-lbl {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+
+.fg-bp-sec {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--muted);
+}
+
+.fg-bp-sec.act {
+  color: var(--sage);
+}
+
+.fg-breath-timer {
+  font-size: 12px;
+  color: var(--subtle);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+/* Phase 3: Choice Cards */
+.fg-p3-eye {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sage);
+  opacity: 0.75;
+  margin-bottom: 20px;
+}
+
+.fg-cards {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.fg-ccard {
+  flex: 1;
+  min-width: 150px;
+  max-width: 190px;
+  padding: 28px 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.22s;
+}
+
+.fg-ccard:hover {
+  border-color: rgba(255,255,255,0.12);
+  background: var(--card-hover);
+  transform: translateY(-3px);
+}
+
+.fg-ccard.g:hover {
+  border-color: var(--border-sage);
+  background: rgba(130,217,172,0.07);
+}
+
+.fg-ci {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.fg-ci.home { background: rgba(130,217,172,0.12); }
+.fg-ci.order { background: rgba(255,255,255,0.05); }
+
+.fg-ctitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.fg-cdesc {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.5;
+}

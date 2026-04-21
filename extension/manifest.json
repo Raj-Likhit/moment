@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Moment",
+  "version": "1.0",
+  "description": "A science-backed pause before every impulsive food order.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://www.zomato.com/*",
+    "https://www.swiggy.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.zomato.com/*", "https://www.swiggy.com/*"],
+      "js": ["content.js"],
+      "css": ["overlay.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon.svg",
+      "48": "icons/icon.svg",
+      "128": "icons/icon.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon.svg",
+    "48": "icons/icon.svg",
+    "128": "icons/icon.svg"
+  }
+}
